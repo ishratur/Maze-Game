@@ -55,6 +55,6 @@ public class Cell {
         return "{" +
                 + rowNumber +
                 "," + columnNumber +
-                '}' + "  " ;
+                '}' + " visited: " + isCellVisited ;
     }
 }
