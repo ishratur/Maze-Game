@@ -9,16 +9,20 @@ public class Grid {
     private ArrayList<Cell> grid;
     private final int NUMBER_OF_ROWS = 13;
     private final int NUMBER_OF_COLUMNS = 18;
-    private Stack<Cell> neighbours;
+    private Stack<Cell> neighbourStack;
     private Cell currentCell;
+
+
+/*    private final int NUMBER_OF_ROWS = 3;
+    private final int NUMBER_OF_COLUMNS = 4;*/
+
 
 
     public Grid() {
         grid =  new ArrayList<>();
-        neighbours = new Stack<>();
+        neighbourStack = new Stack<>();
         fillGrid();
-        currentCell = grid.get(50);
-        runGrid();
+        createMaze();
 //        printGrid();
 
 
@@ -29,44 +33,59 @@ public class Grid {
                  grid.add(new Cell(j,i));
              }
          }
+         currentCell = grid.get(0);
      }
 
-     public void checkNeighbours(Cell cell){
-/*
-        if (cell != null && cell.getCellVisited() == false){
-            neighbours.push(cell);
-        }*/
+     public Cell getRandomNeighbour(Cell cell){
+         ArrayList<Cell> currentCellNeighbours = new ArrayList<>();
+
+        //All the neighbours of the current cell
+         System.out.print("***Current Cell: ");
+         System.out.println(cell.toString());
+         System.out.println("-----------------------------");
+
+
 
         if (getTopNeighbour(cell) != null && getTopNeighbour(cell).getCellVisited() == false){
             Cell top = getTopNeighbour(cell);
-            neighbours.push(top);
+            currentCellNeighbours.add(top);
             System.out.println("top: " + top.toString());
         }
 
         if (getRightNeighbour(cell) != null && getRightNeighbour(cell).getCellVisited() == false){
             Cell right = getRightNeighbour(cell);
-            neighbours.push(right);
-            System.out.println("right: " + right.toString());
+            currentCellNeighbours.add(right);
+           System.out.println("right: " + right.toString());
         }
 
         if (getBottomNeighbour(cell) != null && getBottomNeighbour(cell).getCellVisited() == false){
-
             Cell bottom = getBottomNeighbour(cell);
-            neighbours.push(bottom);
+            currentCellNeighbours.add(bottom);
             System.out.println("bottom: " + bottom.toString());
         }
 
         if (getLeftNeighbour(cell) != null && getLeftNeighbour(cell).getCellVisited() == false ){
             Cell left = getLeftNeighbour(cell);
-            neighbours.push(left);
+            currentCellNeighbours.add(left);
             System.out.println("left: " + left.toString());
         }
 
+         //print neighbour array element
 
-//        print stack element
-         System.out.println("=======STACK==========");
-         neighbours.forEach(System.out::println);
-         System.out.println("=================");
+         System.out.println("Neighbor Array: ");
+         currentCellNeighbours.forEach(System.out::println);
+         System.out.println("-----------------------------------");
+
+
+        //Returns a random neighbour of the cell to the calling method
+
+         if (!currentCellNeighbours.isEmpty()){
+             Random rand = new Random();
+             int n = rand.nextInt(currentCellNeighbours.size());
+             return currentCellNeighbours.get(n);
+
+         }
+         return null;
 
 
      }
@@ -131,15 +150,7 @@ public class Grid {
         return null;
     }
 
-    public Cell pickRandomNeighbour(){
-        if (!neighbours.isEmpty()){
-            Random rand = new Random();
-            int n = rand.nextInt(neighbours.size());
-            return neighbours.get(n);
 
-        }
-        return null;
-    }
 
      public void printGrid(){
          //Print Grid
@@ -162,14 +173,55 @@ public class Grid {
          }
      }
 
-     public void runGrid(){
+     public void createMaze(){
+        //set the current cell as visited
          currentCell.setCellVisited();
-         checkNeighbours(currentCell);
-         Cell nextCell = pickRandomNeighbour();
+         //set the current cell to the stack
+         neighbourStack.push(currentCell);
+         //cell to hold the next cell to be visited
+         Cell nextCell = null;
 
-         nextCell.setCellVisited();
-         currentCell = nextCell;
-         System.out.println(currentCell.toString());
+         //until stack is not empty..
+         while (!neighbourStack.isEmpty()){
+             Cell randomCell = getRandomNeighbour(currentCell);
+
+             //until there is valid moves
+
+             if (randomCell != null){
+                 //this will be the next cell to visit. Find this cell in the maze
+                 for (Cell c: grid){
+                     if (c.getColumnNumber() == randomCell.getColumnNumber() && c.getRowNumber() == randomCell.getRowNumber()){
+                         nextCell = c;
+                         break;
+                     }
+                 }
+                 neighbourStack.push(nextCell);
+                 nextCell.setCellVisited();
+                 currentCell = nextCell;
+
+                 System.out.println("Stack: ");
+                 neighbourStack.forEach(System.out::println);
+                 System.out.println("-----------------");
+
+
+             }
+             // backtrack when no more valid moves left for the current cell
+             else {
+                 System.out.println("=======Backtracking=========");
+                 System.out.println("Stack: ");
+                 neighbourStack.forEach(System.out::println);
+                 nextCell = neighbourStack.pop();
+
+                 System.out.println("-----------------");
+                 for (Cell c: grid){
+                     if (c.getColumnNumber() == nextCell.getColumnNumber() && c.getRowNumber() == nextCell.getRowNumber()){
+                         currentCell = c;
+                         break;
+                     }
+                 }
+             }
+         }
+
 
 
 
