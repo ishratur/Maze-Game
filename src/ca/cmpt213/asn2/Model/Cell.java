@@ -4,8 +4,7 @@ public class Cell {
     private int rowNumber;
     private int columnNumber;
 
-    // walls -> top, right, bottom, left
-    private boolean walls [] = {true, true, true,true};
+    private boolean wall;
 
     //cell visited or not
     private boolean isCellVisited;
@@ -15,6 +14,7 @@ public class Cell {
         this.columnNumber = columnNumber;
         this.rowNumber = rowNumber;
         isCellVisited = false;
+        wall = true;
 
     }
 
@@ -33,12 +33,14 @@ public class Cell {
     public void setRowNumber(int rowNumber) {
         this.rowNumber = rowNumber;
     }
-    public boolean[] getWalls() {
-        return walls;
+
+    public boolean getWall() {
+        return wall;
     }
 
-    public void setWalls(boolean[] walls) {
-        this.walls = walls;
+    public void removeWall() {
+
+        this.wall = false;
     }
 
     public boolean getCellVisited() {
@@ -55,6 +57,7 @@ public class Cell {
         return "{" +
                 + rowNumber +
                 "," + columnNumber +
-                '}' + " visited: " + isCellVisited ;
+                '}' + " visited: " + isCellVisited +
+                "; wall: " + getWall();
     }
 }

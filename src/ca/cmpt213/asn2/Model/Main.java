@@ -9,7 +9,7 @@ public class Main {
 
     public static void main(String[] args) {
 	// Making the grid
-        Grid grid = new Grid();
+        new Grid();
 //        grid.printGrid();
 
 

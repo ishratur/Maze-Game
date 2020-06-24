@@ -7,14 +7,18 @@ import java.util.Stack;
 public class Grid {
     // Making the grid
     private ArrayList<Cell> grid;
-    private final int NUMBER_OF_ROWS = 13;
-    private final int NUMBER_OF_COLUMNS = 18;
+    private final int NUMBER_OF_ROWS = 15;
+    private final int NUMBER_OF_COLUMNS = 20;
     private Stack<Cell> neighbourStack;
     private Cell currentCell;
 
+    private final String HERO = "@";
+    private final String MONSTER = "!";
+    private  final String POWER = "$";
+    private final String WALL = "#";
+    private final String INVISIBLE = ".";
 
-/*    private final int NUMBER_OF_ROWS = 3;
-    private final int NUMBER_OF_COLUMNS = 4;*/
+
 
 
 
@@ -23,7 +27,8 @@ public class Grid {
         neighbourStack = new Stack<>();
         fillGrid();
         createMaze();
-//        printGrid();
+        printGrid();
+
 
 
     }
@@ -33,7 +38,8 @@ public class Grid {
                  grid.add(new Cell(j,i));
              }
          }
-         currentCell = grid.get(0);
+//         currentCell = grid.get(0);
+         currentCell = getCellObject(1,1);
      }
 
      public Cell getRandomNeighbour(Cell cell){
@@ -72,9 +78,9 @@ public class Grid {
 
          //print neighbour array element
 
-         System.out.println("Neighbor Array: ");
+/*         System.out.println("Neighbor Array: ");
          currentCellNeighbours.forEach(System.out::println);
-         System.out.println("-----------------------------------");
+         System.out.println("-----------------------------------");*/
 
 
         //Returns a random neighbour of the cell to the calling method
@@ -90,7 +96,7 @@ public class Grid {
 
      }
 
-     public Cell getTopNeighbour(Cell cell){
+   /*  public Cell getTopNeighbour(Cell cell){
          int row = cell.getRowNumber() - 1;
          int col = cell.getColumnNumber();
 
@@ -150,81 +156,136 @@ public class Grid {
         return null;
     }
 
+*/
 
 
      public void printGrid(){
          //Print Grid
-         System.out.println("");
-         for (Cell c: grid){
-             if (c.getColumnNumber() == 17){
-                 System.out.println();
-             }
-             if(c.getCellVisited()) {
+         System.out.println("PRINTING THE MAZE \n");
+         for (int j = 0; j < NUMBER_OF_ROWS; j++) {
+             for (int i = 0; i < NUMBER_OF_COLUMNS; i++) {
+                 Cell temp = getCellObject(j,i);
+                 if (temp.getWall()){
+                     System.out.print(WALL);
+                 }
+                 else {
+                     System.out.print(INVISIBLE);
+                 }
 
-                 System.out.print(".");
-//                 checkNeighbours(c);
-//                 System.out.println(pickRandomNeighbour().toString());
-
              }
-             if (!c.getCellVisited()){
-                 System.out.print("#");
-             }
-
+             System.out.println();
          }
+
      }
 
-     public void createMaze(){
-        //set the current cell as visited
-         currentCell.setCellVisited();
-         //set the current cell to the stack
-         neighbourStack.push(currentCell);
-         //cell to hold the next cell to be visited
-         Cell nextCell = null;
 
-         //until stack is not empty..
-         while (!neighbourStack.isEmpty()){
-             Cell randomCell = getRandomNeighbour(currentCell);
+//    --------------------------------------New Neighbor----------------------------------------------------------------------
 
-             //until there is valid moves
+    public Cell getTopNeighbour(Cell cell){
+        int row = cell.getRowNumber() - 1;
+        int col = cell.getColumnNumber();
 
-             if (randomCell != null){
-                 //this will be the next cell to visit. Find this cell in the maze
-                 for (Cell c: grid){
-                     if (c.getColumnNumber() == randomCell.getColumnNumber() && c.getRowNumber() == randomCell.getRowNumber()){
-                         nextCell = c;
-                         break;
-                     }
-                 }
-                 neighbourStack.push(nextCell);
-                 nextCell.setCellVisited();
-                 currentCell = nextCell;
-
-                 System.out.println("Stack: ");
-                 neighbourStack.forEach(System.out::println);
-                 System.out.println("-----------------");
+        if (row > 0 && col > 0 && row < NUMBER_OF_ROWS - 1 && col < NUMBER_OF_COLUMNS - 1){
+            for (Cell c: grid){
+                if (c.getRowNumber() == row && c.getColumnNumber() == col){
+                    return c;
+                }
+            }
+        }
 
 
-             }
-             // backtrack when no more valid moves left for the current cell
-             else {
-                 System.out.println("=======Backtracking=========");
-                 System.out.println("Stack: ");
-                 neighbourStack.forEach(System.out::println);
-                 nextCell = neighbourStack.pop();
+        return null;
+    }
 
-                 System.out.println("-----------------");
-                 for (Cell c: grid){
-                     if (c.getColumnNumber() == nextCell.getColumnNumber() && c.getRowNumber() == nextCell.getRowNumber()){
-                         currentCell = c;
-                         break;
-                     }
-                 }
+    public Cell getRightNeighbour(Cell cell){
+        int row = cell.getRowNumber();
+        int col = cell.getColumnNumber() + 1;
+
+        if (row > 0 && col > 0 && row < NUMBER_OF_ROWS - 1 && col < NUMBER_OF_COLUMNS - 1){
+            for (Cell c: grid){
+                if (c.getRowNumber() == row && c.getColumnNumber() == col){
+                    return c;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public Cell getBottomNeighbour(Cell cell){
+        int row = cell.getRowNumber() + 1;
+        int col = cell.getColumnNumber();
+        if (row > 0 && col > 0 && row < NUMBER_OF_ROWS - 1 && col < NUMBER_OF_COLUMNS - 1){
+            for (Cell c: grid){
+                if (c.getRowNumber() == row && c.getColumnNumber() == col){
+                    return c;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public Cell getLeftNeighbour(Cell cell){
+        int row = cell.getRowNumber();
+        int col = cell.getColumnNumber() - 1;
+
+        if (row > 0 && col > 0 && row < NUMBER_OF_ROWS - 1 && col < NUMBER_OF_COLUMNS - 1){
+            for (Cell c: grid){
+                if (c.getRowNumber() == row && c.getColumnNumber() == col){
+                    return c;
+                }
+            }
+        }
+
+        return null;
+    }
+
+
+//    ------------------------------------------------------------------------------------------------------------------
+
+
+
+     // returns a cell object from the grid using given row and column
+     public Cell getCellObject(int row, int col){
+         for (Cell c: grid){
+             if (c.getColumnNumber() == col && c.getRowNumber() == row){
+                 return c;
+
              }
          }
+         return null;
 
+     }
+    /*
+     * Maze is generated by Depth First Search using Recursive backtracking.
+     * */
+     public void createMaze(){
+         //1. Choose the initial cell, mark it as visited and push it to the stack
+         currentCell.setCellVisited();
+         neighbourStack.push(currentCell);
 
+         //2. While the stack is not empty
+         while (!neighbourStack.isEmpty()){
+             //2.1 Pop a cell from the stack and make it a current cell
+             currentCell = neighbourStack.pop();
+             //2.2 If the current cell has any neighbours which have not been visited
+             if (getRandomNeighbour(currentCell) != null){
+                 //2.2.1 Push the current cell to the stack
+                 neighbourStack.push(currentCell);
+                 //2.2.2 Choose one of the unvisited neighbours
+                 Cell chosenNeighbor = getRandomNeighbour(currentCell);
+                 //2.2.3 Remove the wall between the current cell and the chosen cell
+                 currentCell.removeWall();
+                 //2.2.4 Mark the chosen cell as visited and push it to the stack
+                 chosenNeighbor.setCellVisited();
+                 neighbourStack.push(chosenNeighbor);
 
+             }
+             System.out.println("++++Stack: ");
+             neighbourStack.forEach(System.out::println);
 
+         }
      }
 
 
