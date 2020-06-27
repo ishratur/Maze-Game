@@ -11,11 +11,7 @@ public class Grid {
     private final int NUMBER_OF_COLUMNS = 20;
     private Stack<Cell> neighbourStack;
     private Cell currentCell;
-/*    private final String HERO = "@";
-    private final String MONSTER = "!";
-    private  final String POWER = "$";*/
-    private final String WALL = "#";
-    private final String INVISIBLE = ".";
+
 
 
 
@@ -25,9 +21,8 @@ public class Grid {
         fillGrid();
         createMaze();
         removeInnerWalls();
-
         clearCornerWalls();
-        printGrid();
+//        printGrid();
 
 
     }
@@ -123,6 +118,7 @@ public class Grid {
 
 
 
+/*
      public void printGrid(){
          //Print Grid
          System.out.println("PRINTING THE MAZE \n");
@@ -141,6 +137,7 @@ public class Grid {
          }
 
      }
+*/
 
 
     public Cell getTopNeighbour(Cell cell){

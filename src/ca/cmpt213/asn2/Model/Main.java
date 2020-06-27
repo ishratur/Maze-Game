@@ -1,18 +1,11 @@
 package ca.cmpt213.asn2.Model;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Random;
+import ca.cmpt213.asn2.Model.Grid;
 
 public class Main {
 
     public static void main(String[] args) {
-	// Making the grid
-        new Grid();
-//        grid.printGrid();
-
-
+        new GameLogic();
 
     }
 }

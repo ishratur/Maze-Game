@@ -1,7 +1,8 @@
 package ca.cmpt213.asn2.Model;
 
-import javax.swing.plaf.IconUIResource;
-import java.lang.reflect.Array;
+
+import ca.cmpt213.asn2.UI.GameUI;
+
 import java.util.*;
 
 public class GameLogic {
@@ -12,6 +13,7 @@ public class GameLogic {
     private final String HELP_COMMAND = "?";
     private final String REVEAL_MAZE_COMMAND = "m";
     private Grid grid;
+    private GameUI gameUI;
     private final int NUMBER_OF_ROWS = 15;
     private final int NUMBER_OF_COLUMNS = 20;
 
@@ -22,12 +24,20 @@ public class GameLogic {
 
     public GameLogic() {
         this.grid = new Grid();
+        this.gameUI = new GameUI();
+
         initializeMonsters();
+        //initialize Hero
         hero = new Hero(1,1);
         grid.getCellObject(1,1).setCellIsHero(true);
+        //initialize power
         Cell cell = grid.getRandomCellForPower();
         power = new Power(cell.getRowNumber(),cell.getColumnNumber());
-
+        grid.getCellObject(power.getRowNumber(), power.getColumnNumber()).setCellIsPower(true);
+        initializeMonsters();
+        gameUI.printStartUp();
+        gameUI.printMaze(grid);
+        moveHero();
 
     }
 
@@ -43,7 +53,7 @@ public class GameLogic {
 
     }
 
-    public void runGame(){
+    public void moveHero(){
 
         while (true){
             Scanner userInput = new Scanner(System.in);
@@ -56,7 +66,7 @@ public class GameLogic {
             int col = hero.getColumnNumber();
             Cell heroCell = grid.getCellObject(row, col);
 
-            if (input == UP_COMMAND){
+            if (input.equals(UP_COMMAND)){
                 if (!isMoveValid(row -1, col)){
                     System.out.println("Invalid move! You can not move through walls");
                     continue;
@@ -65,7 +75,7 @@ public class GameLogic {
 
 
             }
-            else if (input == DOWN_COMMAND){
+            else if (input.equals(DOWN_COMMAND)){
                 if (!isMoveValid(row + 1, col)){
                     System.out.println("Invalid move! You can not move through walls");
                     continue;
@@ -73,7 +83,7 @@ public class GameLogic {
                 hero.goDown();
 
             }
-            else if (input == RIGHT_COMMAND){
+            else if (input.equals(RIGHT_COMMAND)){
                 if (!isMoveValid(row , col + 1)){
                     System.out.println("Invalid move! You can not move through walls");
                     continue;
@@ -81,7 +91,7 @@ public class GameLogic {
                 hero.goRight();
 
             }
-            else if (input == LEFT_COMMAND) {
+            else if (input.equals(LEFT_COMMAND)) {
                 if (!isMoveValid(row, col - 1)) {
                     System.out.println("Invalid move! You can not move through walls");
                     continue;
@@ -140,13 +150,9 @@ public class GameLogic {
     }
 
     public boolean isInputValid(String userInput){
-        if ((userInput == UP_COMMAND || userInput == DOWN_COMMAND ||
-                userInput == RIGHT_COMMAND || userInput == LEFT_COMMAND ||
-                userInput == HELP_COMMAND)){
-            return true;
-        }
-        return false;
-
+        return (userInput.equals(UP_COMMAND) || userInput.equals(DOWN_COMMAND) ||
+                userInput.equals(RIGHT_COMMAND) || userInput.equals(LEFT_COMMAND) ||
+                userInput.equals(HELP_COMMAND));
 
 
     }
@@ -178,21 +184,21 @@ public class GameLogic {
             Random rand = new Random();
             String input = commands.get(rand.nextInt(size));
 
-            if (input == UP_COMMAND){
+            if (input.equals(UP_COMMAND)){
                 if (!isMoveValid(row -1, col)){
                     continue;
                 }
                 monsters.get(i).goUp();
                 break;
             }
-            else if (input == DOWN_COMMAND){
+            else if (input.equals(DOWN_COMMAND)){
                 if (!isMoveValid(row + 1, col)){
                     continue;
                 }
                 monsters.get(i).goDown();
                 break;
             }
-            else if (input == RIGHT_COMMAND){
+            else if (input.equals(RIGHT_COMMAND)){
                 if (!isMoveValid(row , col + 1)){
 
                     continue;
@@ -200,7 +206,7 @@ public class GameLogic {
                 monsters.get(i).goRight();
                 break;
             }
-            else if (input == LEFT_COMMAND){
+            else if (input.equals(LEFT_COMMAND)){
                 if (!isMoveValid(row , col - 1)){
 
                     continue;

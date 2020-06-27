@@ -3,10 +3,14 @@ package ca.cmpt213.asn2.Model;
 public class Power {
     private int rowNumber;
     private int columnNumber;
+    private int powerCount;
+
+
 
     public Power(int rowNumber, int columnNumber) {
         this.rowNumber = rowNumber;
         this.columnNumber = columnNumber;
+        this.powerCount = 1;
     }
 
     public int getRowNumber() {
@@ -24,4 +28,13 @@ public class Power {
     public void setColumnNumber(int columnNumber) {
         this.columnNumber = columnNumber;
     }
+
+    public int getPowerCount() {
+        return powerCount;
+    }
+
+    public void decrementPowerCount() {
+        this.powerCount = 0;
+    }
+
 }
