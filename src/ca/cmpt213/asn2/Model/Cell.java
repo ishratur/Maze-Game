@@ -3,18 +3,26 @@ package ca.cmpt213.asn2.Model;
 public class Cell {
     private int rowNumber;
     private int columnNumber;
-
     private boolean wall;
-
-    //cell visited or not
     private boolean isCellVisited;
+
+    private boolean isCellIsHero;
+    private int numMonsters;
+    private boolean isCellIsPower;
+
 
 
     public Cell( int rowNumber, int columnNumber) {
         this.columnNumber = columnNumber;
         this.rowNumber = rowNumber;
-        isCellVisited = false;
-        wall = true;
+        this.isCellVisited = false;
+        this.wall = true;
+
+        this.isCellIsHero = false;
+        this.numMonsters = 0;
+        this.isCellIsPower = false;
+        //use getWall() for wall status
+
 
     }
 
@@ -43,6 +51,11 @@ public class Cell {
         this.wall = false;
     }
 
+    public void setWall(){
+        this.wall = true;
+    }
+
+
     public boolean getCellVisited() {
         return isCellVisited;
     }
@@ -60,4 +73,35 @@ public class Cell {
                 '}' + " visited: " + isCellVisited +
                 "; wall: " + getWall();
     }
+
+    public boolean isCellIsHero() {
+        return isCellIsHero;
+    }
+
+    public void setCellIsHero(boolean isHero) {
+        isCellIsHero = isHero;
+    }
+
+    public boolean isCellIsMonster() {
+        return numMonsters > 0;
+    }
+
+    public void incrementMonster() {
+        numMonsters++;
+    }
+
+    public void decrementMonster() {
+        numMonsters--;
+    }
+
+    public boolean isCellIsPower() {
+        return isCellIsPower;
+    }
+
+    public void setCellIsPower(boolean isPower) {
+        isCellIsPower = isPower;
+    }
+
+
+
 }

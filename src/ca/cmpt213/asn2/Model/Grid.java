@@ -11,15 +11,11 @@ public class Grid {
     private final int NUMBER_OF_COLUMNS = 20;
     private Stack<Cell> neighbourStack;
     private Cell currentCell;
-
-    private final String HERO = "@";
+/*    private final String HERO = "@";
     private final String MONSTER = "!";
-    private  final String POWER = "$";
+    private  final String POWER = "$";*/
     private final String WALL = "#";
     private final String INVISIBLE = ".";
-
-
-
 
 
 
@@ -28,19 +24,58 @@ public class Grid {
         neighbourStack = new Stack<>();
         fillGrid();
         createMaze();
+        removeInnerWalls();
+
+        clearCornerWalls();
         printGrid();
 
 
+    }
+
+    private void removeInnerWalls() {
+        int removeWalls = 35;
+        Random rand = new Random();
+        int low = 1;
+        int maxRow = NUMBER_OF_ROWS - 2;
+        int maxCol = NUMBER_OF_COLUMNS - 2;
+        while (removeWalls > 0){
+            int row = rand.nextInt(maxRow - low) + low;
+            int col = rand.nextInt(maxCol - low) + low;
+            Cell cell = getCellObject(row, col);
+            if (cell.getWall()){
+                cell.removeWall();
+                removeWalls--;
+            }
+            else {
+                continue;
+            }
+
+        }
 
     }
-     public void fillGrid(){
+
+
+    private void clearCornerWalls() {
+        Cell topLeftCorner = getCellObject(1,1);
+        Cell topRightCorner = getCellObject(1,NUMBER_OF_COLUMNS - 2) ;
+        Cell bottomLeftCorner = getCellObject(NUMBER_OF_ROWS - 2, 1);
+        Cell bottomRightCorner = getCellObject(NUMBER_OF_ROWS - 2, NUMBER_OF_COLUMNS - 2);
+
+        topLeftCorner.removeWall();
+        topRightCorner.removeWall();
+        bottomLeftCorner.removeWall();
+        bottomRightCorner.removeWall();
+
+    }
+
+    public void fillGrid(){
          for (int j = 0; j < NUMBER_OF_ROWS; j++) {
              for (int i = 0; i < NUMBER_OF_COLUMNS; i++) {
                  grid.add(new Cell(j,i));
              }
          }
-//         currentCell = grid.get(0);
          currentCell = getCellObject(1,1);
+
      }
 
      public Cell getRandomNeighbour(Cell cell){
@@ -52,29 +87,26 @@ public class Grid {
         if (getTopNeighbour(cell) != null && !getTopNeighbour(cell).getCellVisited()){
             Cell top = getTopNeighbour(cell);
             currentCellNeighbours.add(top);
-            System.out.println("top: " + top.toString());
+
         }
 
         if (getRightNeighbour(cell) != null && !getRightNeighbour(cell).getCellVisited()){
             Cell right = getRightNeighbour(cell);
             currentCellNeighbours.add(right);
-           System.out.println("right: " + right.toString());
+
         }
 
         if (getBottomNeighbour(cell) != null && !getBottomNeighbour(cell).getCellVisited()){
             Cell bottom = getBottomNeighbour(cell);
             currentCellNeighbours.add(bottom);
-            System.out.println("bottom: " + bottom.toString());
+
         }
 
         if (getLeftNeighbour(cell) != null && !getLeftNeighbour(cell).getCellVisited()){
             Cell left = getLeftNeighbour(cell);
             currentCellNeighbours.add(left);
-            System.out.println("left: " + left.toString());
+
         }
-
-
-
 
         //Returns a random unvisited neighbour of the cell to the calling method
 
@@ -177,28 +209,26 @@ public class Grid {
          currentCell.setCellVisited();
          neighbourStack.push(currentCell);
 
-
          //2. While the stack is not empty
          while (!neighbourStack.isEmpty()){
              //2.1 Pop a cell from the stack and make it a current cell
              currentCell = neighbourStack.pop();
-             debugDump(currentCell);
              //2.2 If the current cell has any neighbours which have not been visited
-             if (getRandomNeighbour(currentCell) != null){
-                 System.out.println("have neighbor");
+             while (getRandomNeighbour(currentCell) != null){
+
                  //2.2.1 Push the current cell to the stack
                  neighbourStack.push(currentCell);
                  //2.2.2 Choose one of the unvisited neighbours
                  Cell chosenNeighbor = getRandomNeighbour(currentCell);
                  //2.2.3 Remove the wall between the current cell and the chosen cell
                  currentCell.removeWall();
+
                  //2.2.4 Mark the chosen cell as visited and push it to the stack
                  chosenNeighbor.setCellVisited();
                  neighbourStack.push(chosenNeighbor);
 
              }
-             System.out.println("++++Stack: ");
-             neighbourStack.forEach(System.out::println);
+
 
          }
      }
@@ -208,6 +238,33 @@ public class Grid {
         System.out.println(c.toString());
         System.out.println("-----------------------------");
     }
+
+    public Cell getRandomCellForPower(){
+
+        Random rand = new Random();
+        int low = 1;
+        int maxRow = NUMBER_OF_ROWS - 2;
+        int maxCol = NUMBER_OF_COLUMNS - 2;
+        while (true){
+            int row = rand.nextInt(maxRow - low) + low;
+            int col = rand.nextInt(maxCol - low) + low;
+            Cell cell = getCellObject(row, col);
+            if (!(cell.getWall() || cell.isCellIsHero())){
+                return cell;
+            }
+
+        }
+
+
+     }
+
+     public boolean isCellPositionValid(int row, int col){
+         if (row > 0 && col > 0 && row < NUMBER_OF_ROWS - 1 && col < NUMBER_OF_COLUMNS - 1){
+
+             return true;
+         }
+         return false;
+     }
 
 
 }
