@@ -4,7 +4,11 @@ import ca.cmpt213.asn2.Model.Cell;
 import ca.cmpt213.asn2.Model.Grid;
 
 import java.util.Scanner;
-
+/*
+* GameUI class all the UI logic. Only this class interacts with user input and printing to
+* the console. GameLogic class prints all the messages and gets all the
+* user inputs from this class.
+*/
 public class GameUI {
     private final int NUMBER_OF_ROWS = 15;
     private final int NUMBER_OF_COLUMNS = 20;

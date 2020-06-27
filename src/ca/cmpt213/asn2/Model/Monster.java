@@ -1,5 +1,10 @@
 package ca.cmpt213.asn2.Model;
 
+
+/*
+ * Monster class has all the information about a Monster.
+ * This class tracks all the Monster movements and it's survival status.
+ * */
 public class Monster {
     private int rowNumber;
     private int columnNumber;

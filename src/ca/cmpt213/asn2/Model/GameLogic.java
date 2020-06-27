@@ -4,7 +4,10 @@ package ca.cmpt213.asn2.Model;
 import ca.cmpt213.asn2.UI.GameUI;
 
 import java.util.*;
-
+/*
+* GameLogic class has all the logic about the game. This class
+* stores the game state. This is the only class that interacts with the UI class.
+*/
 public class GameLogic {
     private final String UP_COMMAND = "W";
     private final String DOWN_COMMAND = "S";

@@ -1,5 +1,9 @@
 package ca.cmpt213.asn2.Model;
 
+/*
+* Power class has all the data related to Power. This class
+* is used to find all the power related data.
+*/
 public class Power {
     private int rowNumber;
     private int columnNumber;

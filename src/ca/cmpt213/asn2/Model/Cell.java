@@ -1,5 +1,11 @@
 package ca.cmpt213.asn2.Model;
 
+
+/*
+* Cell class has all the data related to each cell in the Maze board.
+* Data is encapsulated according to the requirements of other classes using
+* this class.
+*/
 public class Cell {
     private int rowNumber;
     private int columnNumber;
@@ -22,7 +28,7 @@ public class Cell {
         this.isCellIsHero = false;
         this.numMonsters = 0;
         this.isCellIsPower = false;
-//        this.hideCell = true;
+
 
 
 

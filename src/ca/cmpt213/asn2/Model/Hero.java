@@ -1,5 +1,11 @@
 package ca.cmpt213.asn2.Model;
 
+
+/*
+* Hero class has all the information about the Hero.
+* This class tracks all the Hero movements, number of power
+* hero possesses and it's survival status.
+* */
 public class Hero {
     private int rowNumber;
     private int columnNumber;
