@@ -50,16 +50,19 @@ public class Hero {
     }
 
 
-    public void goLeft(){
+    public void goLeft() {
         columnNumber--;
     }
-    public void goRight(){
+
+    public void goRight() {
         columnNumber++;
     }
-    public void goDown(){
+
+    public void goDown() {
         rowNumber++;
     }
-    public void goUp(){
+
+    public void goUp() {
         rowNumber--;
     }
 }

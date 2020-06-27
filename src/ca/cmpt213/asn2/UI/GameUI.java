@@ -10,12 +10,12 @@ public class GameUI {
     private final int NUMBER_OF_COLUMNS = 20;
     private final String HERO = "@";
     private final String MONSTER = "!";
-    private  final String POWER = "$";
+    private final String POWER = "$";
     private final String WALL = "#";
     private final String INVISIBLE = ".";
     private final String EMPTY = " ";
 
-    public void printHelpMenu(){
+    public void printHelpMenu() {
         System.out.println("DIRECTIONS");
         System.out.println("    Kill 3 Monsters!");
         System.out.println("LEGEND:");
@@ -29,13 +29,13 @@ public class GameUI {
         System.out.println("    (You must press enter after each move).");
     }
 
-    public String getHeroMoveInput(){
+    public String getHeroMoveInput() {
         System.out.print("Enter your move [WASD?]: ");
         Scanner userInput = new Scanner(System.in);
         return (userInput.next().toUpperCase());
     }
 
-    public void printStartUp(){
+    public void printStartUp() {
         //PRINTOUT FOR GAME STARTUP
         System.out.println("---------");
         System.out.println("1) Start");
@@ -45,41 +45,63 @@ public class GameUI {
 
     }
 
-    public void printInvalidCommand(){
+    public void printInvalidCommand() {
         System.out.println("Invalid move. Please enter just A (left), S (down), D (right), or W (up) or ? (Help)");
     }
 
-    public void printInvalidMove(){
+    public void printInvalidMove() {
         System.out.println("Invalid move: you cannot move through walls!");
     }
 
-    public void printWinMessage(){
+    public void printWinMessage() {
         System.out.println("Bravo! You won the Game");
     }
 
-    public void printHeroKilledMessage(){
+    public void printHeroKilledMessage() {
         System.out.println("You have been killed! Better luck next time");
     }
 
-    public void printMaze(Grid grid){
+    public void printMaze(Grid grid) {
         System.out.println("Maze:");
         for (int j = 0; j < NUMBER_OF_ROWS; j++) {
             for (int i = 0; i < NUMBER_OF_COLUMNS; i++) {
-                Cell cell = grid.getCellObject(j,i);
-                if (cell.getWall()){
+                Cell cell = grid.getCellObject(j, i);
+                if (cell.getWall()) {
                     System.out.print(WALL);
-                }
-
-                else if (cell.isCellIsHero()){
+                } else if (cell.isCellIsHero()) {
                     System.out.print(HERO);
-                }
-
-                else if (cell.isCellIsPower()){
+                } else if (cell.isCellIsPower()) {
                     System.out.print(POWER);
-                }
-
-                else if (cell.isCellIsMonster()){
+                } else if (cell.isCellIsMonster()) {
                     System.out.print(MONSTER);
+                } else {
+                    System.out.print(INVISIBLE);
+                }
+            }
+            System.out.println();
+
+        }
+
+    }
+
+    public void printHiddenMaze(Grid grid){
+        System.out.println("Maze:");
+        for (int j = 0; j < NUMBER_OF_ROWS; j++) {
+            for (int i = 0; i < NUMBER_OF_COLUMNS; i++) {
+                Cell cell = grid.getCellObject(j, i);
+                if (cell.getWall() && cell.getCellHideStatus()) {
+                    System.out.print(WALL);
+                }else if (cell.isCellIsHero()) {
+                    System.out.print(HERO);
+                }else if (cell.isCellIsPower()) {
+                    System.out.print(POWER);
+                }else if (cell.isCellIsMonster()) {
+                    System.out.print(MONSTER);
+                } else if(cell.isCellBlank()){
+                    System.out.print(" ");
+                }
+                else if (!cell.getWall() && cell.getCellHideStatus()){
+                    System.out.print(" ");
                 }
                 else {
                     System.out.print(INVISIBLE);
@@ -89,6 +111,12 @@ public class GameUI {
 
         }
 
+    }
+
+    public void printGameStatAfterEachMove(int numPowerOfHero, int monsterAlive) {
+        System.out.println("Total number of monsters to be killed: 3" );
+        System.out.println("Number of powers currently in possession: " + numPowerOfHero);
+        System.out.println("Number of monsters alive:" + monsterAlive);
     }
 
 }

@@ -5,11 +5,15 @@ public class Monster {
     private int columnNumber;
     private boolean alive;
 
+
     public Monster(int rowNumber, int columnNumber) {
         this.rowNumber = rowNumber;
         this.columnNumber = columnNumber;
         this.alive = true;
+
     }
+
+
     public int getRowNumber() {
         return rowNumber;
     }
@@ -34,16 +38,19 @@ public class Monster {
         this.columnNumber = columnNumber;
     }
 
-    public void goLeft(){
+    public void goLeft() {
         columnNumber--;
     }
-    public void goRight(){
+
+    public void goRight() {
         columnNumber++;
     }
-    public void goDown(){
+
+    public void goDown() {
         rowNumber++;
     }
-    public void goUp(){
+
+    public void goUp() {
         rowNumber--;
     }
 

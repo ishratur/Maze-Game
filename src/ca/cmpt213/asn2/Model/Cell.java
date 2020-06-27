@@ -9,10 +9,11 @@ public class Cell {
     private boolean isCellIsHero;
     private int numMonsters;
     private boolean isCellIsPower;
+    private boolean hideCell;
+    private boolean makeCellBlank;
 
 
-
-    public Cell( int rowNumber, int columnNumber) {
+    public Cell(int rowNumber, int columnNumber) {
         this.columnNumber = columnNumber;
         this.rowNumber = rowNumber;
         this.isCellVisited = false;
@@ -21,9 +22,25 @@ public class Cell {
         this.isCellIsHero = false;
         this.numMonsters = 0;
         this.isCellIsPower = false;
-        //use getWall() for wall status
+//        this.hideCell = true;
 
 
+
+    }
+    public void setCellBlank(){
+        this.makeCellBlank = true;
+    }
+
+    public boolean isCellBlank(){
+        return makeCellBlank;
+    }
+
+    public boolean getCellHideStatus() {
+        return hideCell;
+    }
+
+    public void removeHideCell(boolean status) {
+        this.hideCell = status;
     }
 
     public int getColumnNumber() {
@@ -51,7 +68,7 @@ public class Cell {
         this.wall = false;
     }
 
-    public void setWall(){
+    public void setWall() {
         this.wall = true;
     }
 
@@ -68,7 +85,7 @@ public class Cell {
     @Override
     public String toString() {
         return "{" +
-                + rowNumber +
+                +rowNumber +
                 "," + columnNumber +
                 '}' + " visited: " + isCellVisited +
                 "; wall: " + getWall();
@@ -101,7 +118,6 @@ public class Cell {
     public void setCellIsPower(boolean isPower) {
         isCellIsPower = isPower;
     }
-
 
 
 }

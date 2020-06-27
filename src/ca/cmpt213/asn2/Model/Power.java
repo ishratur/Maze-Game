@@ -6,7 +6,6 @@ public class Power {
     private int powerCount;
 
 
-
     public Power(int rowNumber, int columnNumber) {
         this.rowNumber = rowNumber;
         this.columnNumber = columnNumber;
