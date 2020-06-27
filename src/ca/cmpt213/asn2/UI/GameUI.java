@@ -3,6 +3,8 @@ package ca.cmpt213.asn2.UI;
 import ca.cmpt213.asn2.Model.Cell;
 import ca.cmpt213.asn2.Model.Grid;
 
+import java.util.Scanner;
+
 public class GameUI {
     private final int NUMBER_OF_ROWS = 15;
     private final int NUMBER_OF_COLUMNS = 20;
@@ -27,13 +29,19 @@ public class GameUI {
         System.out.println("    (You must press enter after each move).");
     }
 
+    public String getHeroMoveInput(){
+        System.out.print("Enter your move [WASD?]: ");
+        Scanner userInput = new Scanner(System.in);
+        return (userInput.next().toUpperCase());
+    }
+
     public void printStartUp(){
         //PRINTOUT FOR GAME STARTUP
         System.out.println("---------");
         System.out.println("1) Start");
         System.out.println("---------\n");
         printHelpMenu();
-//        System.out.println("Maze:");
+
 
     }
 
@@ -49,7 +57,7 @@ public class GameUI {
         System.out.println("Bravo! You won the Game");
     }
 
-    public void printLoseMessage(){
+    public void printHeroKilledMessage(){
         System.out.println("You have been killed! Better luck next time");
     }
 

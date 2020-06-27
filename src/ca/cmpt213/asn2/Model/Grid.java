@@ -22,7 +22,7 @@ public class Grid {
         createMaze();
         removeInnerWalls();
         clearCornerWalls();
-//        printGrid();
+
 
 
     }
@@ -118,26 +118,6 @@ public class Grid {
 
 
 
-/*
-     public void printGrid(){
-         //Print Grid
-         System.out.println("PRINTING THE MAZE \n");
-         for (int j = 0; j < NUMBER_OF_ROWS; j++) {
-             for (int i = 0; i < NUMBER_OF_COLUMNS; i++) {
-                 Cell temp = getCellObject(j,i);
-                 if (temp.getWall()){
-                     System.out.print(WALL);
-                 }
-                 else {
-                     System.out.print(INVISIBLE);
-                 }
-
-             }
-             System.out.println();
-         }
-
-     }
-*/
 
 
     public Cell getTopNeighbour(Cell cell){
@@ -230,11 +210,7 @@ public class Grid {
          }
      }
 
-    private void debugDump(Cell c) {
-        System.out.print("***Current Cell: ");
-        System.out.println(c.toString());
-        System.out.println("-----------------------------");
-    }
+
 
     public Cell getRandomCellForPower(){
 

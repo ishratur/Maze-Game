@@ -16,6 +16,7 @@ public class GameLogic {
     private GameUI gameUI;
     private final int NUMBER_OF_ROWS = 15;
     private final int NUMBER_OF_COLUMNS = 20;
+    private int numberOfMonsters = 3;
 
 
     private ArrayList<Monster> monsters = new ArrayList<>();
@@ -30,15 +31,17 @@ public class GameLogic {
         //initialize Hero
         hero = new Hero(1,1);
         grid.getCellObject(1,1).setCellIsHero(true);
-        //initialize power
+        spawnPower();
+
+        gameUI.printStartUp();
+        moveHero();
+
+    }
+
+    public void spawnPower(){
         Cell cell = grid.getRandomCellForPower();
         power = new Power(cell.getRowNumber(),cell.getColumnNumber());
         grid.getCellObject(power.getRowNumber(), power.getColumnNumber()).setCellIsPower(true);
-        initializeMonsters();
-        gameUI.printStartUp();
-        gameUI.printMaze(grid);
-        moveHero();
-
     }
 
 
@@ -56,11 +59,12 @@ public class GameLogic {
     public void moveHero(){
 
         while (true){
-            Scanner userInput = new Scanner(System.in);
-            String input = userInput.next().toUpperCase();
+            gameUI.printMaze(grid);
+
+            String input = gameUI.getHeroMoveInput();
             if (!isInputValid(input)){
 
-                System.out.println("Invalid user input");
+                gameUI.printInvalidCommand();
             }
             int row = hero.getRowNumber();
             int col = hero.getColumnNumber();
@@ -68,7 +72,7 @@ public class GameLogic {
 
             if (input.equals(UP_COMMAND)){
                 if (!isMoveValid(row -1, col)){
-                    System.out.println("Invalid move! You can not move through walls");
+                    gameUI.printInvalidMove();
                     continue;
                 }
                 hero.goUp();
@@ -77,7 +81,7 @@ public class GameLogic {
             }
             else if (input.equals(DOWN_COMMAND)){
                 if (!isMoveValid(row + 1, col)){
-                    System.out.println("Invalid move! You can not move through walls");
+                    gameUI.printInvalidMove();
                     continue;
                 }
                 hero.goDown();
@@ -85,7 +89,7 @@ public class GameLogic {
             }
             else if (input.equals(RIGHT_COMMAND)){
                 if (!isMoveValid(row , col + 1)){
-                    System.out.println("Invalid move! You can not move through walls");
+                    gameUI.printInvalidMove();
                     continue;
                 }
                 hero.goRight();
@@ -93,7 +97,7 @@ public class GameLogic {
             }
             else if (input.equals(LEFT_COMMAND)) {
                 if (!isMoveValid(row, col - 1)) {
-                    System.out.println("Invalid move! You can not move through walls");
+                    gameUI.printInvalidMove();
                     continue;
                 }
                 hero.goLeft();
@@ -111,17 +115,23 @@ public class GameLogic {
             if(newHeroCell.isCellIsPower()) {
                 hero.incrementPower();
                 newHeroCell.setCellIsPower(false);
+                power.decrementPowerCount();
+                if (power.getPowerCount() == 0){
+                    spawnPower();
+                }
             }
 
             while(newHeroCell.isCellIsMonster()) {
                 if(hero.getPower() <= 0) {
-                    System.out.println("Monster killed you!");
+                    gameUI.printHeroKilledMessage();
                     return;
                 }
                 hero.decrementPower();
-                for(int i = 0; i < 3; i++) {
+                for(int i = 0; i < numberOfMonsters; i++) {
                     if(monsters.get(i).isAlive() && monsters.get(i).getRowNumber() == row && monsters.get(i).getColumnNumber() == col) {
                         monsters.get(i).killMonster();
+                        //remove the monster from monsters list
+                        monsters.remove(i);
                         newHeroCell.decrementMonster();
                         break;
                     }
@@ -138,14 +148,12 @@ public class GameLogic {
 
             }
             if(won) {
-                System.out.println("Yayy!! You won the game!");
+                gameUI.printWinMessage();
                 return;
             }
 
 
         }
-
-
 
     }
 
@@ -168,7 +176,7 @@ public class GameLogic {
     }
 
     public void moveMonsters(){
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < numberOfMonsters; i++) {
             moveMonster(i);
         }
     }
@@ -221,6 +229,10 @@ public class GameLogic {
         int newCol = monsters.get(i).getColumnNumber();
         Cell newCell = grid.getCellObject(newRow, newCol);
         newCell.incrementMonster();
+
+    }
+
+    public void gameStatAfterEachMove(){
 
     }
 
