@@ -46,7 +46,6 @@ public class GameLogic {
         Cell cell = grid.getRandomCellForPower();
         power = new Power(cell.getRowNumber(), cell.getColumnNumber());
         grid.getCellObject(power.getRowNumber(), power.getColumnNumber()).setCellIsPower(true);
-        grid.getCellObject(power.getRowNumber(), power.getColumnNumber()).removeHideCell(true);
     }
 
 
@@ -56,11 +55,9 @@ public class GameLogic {
         monsters.add(new Monster(NUMBER_OF_ROWS - 2, 1));
 
         grid.getCellObject(1, NUMBER_OF_COLUMNS - 2).incrementMonster();
-        grid.getCellObject(1, NUMBER_OF_COLUMNS - 2).removeHideCell(true);
         grid.getCellObject(NUMBER_OF_ROWS - 2, NUMBER_OF_COLUMNS - 2).incrementMonster();
-        grid.getCellObject(NUMBER_OF_ROWS - 2, NUMBER_OF_COLUMNS - 2).removeHideCell(true);
         grid.getCellObject(NUMBER_OF_ROWS - 2, 1).incrementMonster();
-        grid.getCellObject(NUMBER_OF_ROWS - 2, 1).removeHideCell(true);
+
 
     }
 
@@ -127,6 +124,7 @@ public class GameLogic {
             }
             if (input.equals(REVEAL_MAZE_COMMAND)){
                 gameUI.printMaze(grid);
+                continue;
             }
 //            if (input.equals(CHEAT_COMMAND)){
 //                numberOfMonsters = 1;
@@ -199,6 +197,7 @@ public class GameLogic {
                     return;
                 }
                 hero.decrementPower();
+                
                 for (int i = 0; i < numberOfMonsters; i++) {
                     if (monsters.get(i).isAlive() && monsters.get(i).getRowNumber() == row && monsters.get(i).getColumnNumber() == col) {
                         monsters.get(i).killMonster();
@@ -271,20 +270,23 @@ public class GameLogic {
                 }
                 monsters.get(i).goUp();
                 break;
-            } else if (input.equals(DOWN_COMMAND)) {
+            }
+            else if (input.equals(DOWN_COMMAND)) {
                 if (!isMoveValid(row + 1, col)) {
                     continue;
                 }
                 monsters.get(i).goDown();
                 break;
-            } else if (input.equals(RIGHT_COMMAND)) {
+            }
+            else if (input.equals(RIGHT_COMMAND)) {
                 if (!isMoveValid(row, col + 1)) {
 
                     continue;
                 }
                 monsters.get(i).goRight();
                 break;
-            } else if (input.equals(LEFT_COMMAND)) {
+            }
+            else if (input.equals(LEFT_COMMAND)) {
                 if (!isMoveValid(row, col - 1)) {
 
                     continue;

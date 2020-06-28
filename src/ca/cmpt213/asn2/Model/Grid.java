@@ -1,5 +1,7 @@
 package ca.cmpt213.asn2.Model;
 
+
+
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
@@ -24,18 +26,15 @@ public class Grid {
         fillGrid();
         createMaze();
         clearCornerWalls();
+        removeInnerWalls();
         removeTwoByTwoWalls();
-//        removeInnerWalls();
-
-//        checkConstrain();
-
 
     }
 
 
 
-    private void removeInnerWalls1() {
-        int removeWalls = 10;
+    private void removeInnerWalls() {
+        int removeWalls = 20;
         Random rand = new Random();
         int low = 1;
         int maxRow = NUMBER_OF_ROWS - 2;
@@ -45,11 +44,15 @@ public class Grid {
             int col = rand.nextInt(maxCol - low) + low;
                 Cell cell = getCellObject(row, col);
                 if (cell.getWall()) {
-                    cell.removeWall();
-                    if (checkConstrain(cell.getRowNumber(), cell.getColumnNumber())){
-                        cell.setWall();
+
+                    if (checkConstrainOpenCells(cell.getRowNumber(), cell.getColumnNumber())){
+
+                        removeWalls--;
+
                         continue;
                     }
+                    cell.removeWall();
+
                     removeWalls--;
                 }
 
@@ -58,25 +61,6 @@ public class Grid {
 
     }
 
-/*    private void removeInnerWalls() {
-        int removeWalls = 25;
-        Random rand = new Random();
-        int low = 1;
-        int maxRow = NUMBER_OF_ROWS - 2;
-        int maxCol = NUMBER_OF_COLUMNS - 2;
-        while (removeWalls > 0) {
-            int row = rand.nextInt(maxRow - low) + low;
-            int col = rand.nextInt(maxCol - low) + low;
-            Cell cell = getCellObject(row, col);
-            if (cell.getWall()) {
-                cell.removeWall();
-                removeWalls--;
-            }
-
-
-        }
-
-    }*/
 
 
     private void clearCornerWalls() {
@@ -262,7 +246,7 @@ public class Grid {
     }
 
 
-    private boolean checkConstrain(int j , int i){
+    private boolean checkConstrainOpenCells(int j , int i){
 
             //if all cells around are inside the maze board i.e. without borders
             if (isCellPositionValid(j,i) &&
@@ -271,11 +255,11 @@ public class Grid {
                     isCellPositionValid(j+1, i+1)) {
 
 
-                //check if all are walls
-                if ((getCellObject(j,i).getWall() &&
-                        getCellObject(j, i + 1).getWall() &&
-                        getCellObject(j + 1, i).getWall() &&
-                        getCellObject(j + 1, i + 1).getWall())) {
+                //check if all are open cells
+                if (!(getCellObject(j, i + 1).getWall() ||
+                        getCellObject(j + 1, i).getWall() ||
+                        getCellObject(j + 1, i + 1).getWall()))
+                {
                     return true;
                 }
             }
@@ -310,6 +294,5 @@ public class Grid {
         }
 
     }
-
 
 }
