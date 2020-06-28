@@ -233,7 +233,7 @@ public class GameLogic {
     private boolean isInputValid(String userInput) {
         return (userInput.equals(UP_COMMAND) || userInput.equals(DOWN_COMMAND) ||
                 userInput.equals(RIGHT_COMMAND) || userInput.equals(LEFT_COMMAND) ||
-                userInput.equals(HELP_COMMAND));
+                userInput.equals(HELP_COMMAND) || userInput.equals(REVEAL_MAZE_COMMAND));
 
 
     }

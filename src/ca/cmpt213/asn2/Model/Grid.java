@@ -23,14 +23,43 @@ public class Grid {
         neighbourStack = new Stack<>();
         fillGrid();
         createMaze();
-        removeInnerWalls();
         clearCornerWalls();
+        removeTwoByTwoWalls();
+//        removeInnerWalls();
+
+//        checkConstrain();
 
 
     }
 
-    private void removeInnerWalls() {
-        int removeWalls = 35;
+
+
+    private void removeInnerWalls1() {
+        int removeWalls = 10;
+        Random rand = new Random();
+        int low = 1;
+        int maxRow = NUMBER_OF_ROWS - 2;
+        int maxCol = NUMBER_OF_COLUMNS - 2;
+        while (removeWalls > 0) {
+            int row = rand.nextInt(maxRow - low) + low;
+            int col = rand.nextInt(maxCol - low) + low;
+                Cell cell = getCellObject(row, col);
+                if (cell.getWall()) {
+                    cell.removeWall();
+                    if (checkConstrain(cell.getRowNumber(), cell.getColumnNumber())){
+                        cell.setWall();
+                        continue;
+                    }
+                    removeWalls--;
+                }
+
+
+        }
+
+    }
+
+/*    private void removeInnerWalls() {
+        int removeWalls = 25;
         Random rand = new Random();
         int low = 1;
         int maxRow = NUMBER_OF_ROWS - 2;
@@ -47,7 +76,7 @@ public class Grid {
 
         }
 
-    }
+    }*/
 
 
     private void clearCornerWalls() {
@@ -230,6 +259,56 @@ public class Grid {
 
     public boolean isCellPositionValid(int row, int col) {
         return row > 0 && col > 0 && row < NUMBER_OF_ROWS - 1 && col < NUMBER_OF_COLUMNS - 1;
+    }
+
+
+    private boolean checkConstrain(int j , int i){
+
+            //if all cells around are inside the maze board i.e. without borders
+            if (isCellPositionValid(j,i) &&
+                    isCellPositionValid(j, i+1) &&
+                    isCellPositionValid(j+1, i) &&
+                    isCellPositionValid(j+1, i+1)) {
+
+
+                //check if all are walls
+                if ((getCellObject(j,i).getWall() &&
+                        getCellObject(j, i + 1).getWall() &&
+                        getCellObject(j + 1, i).getWall() &&
+                        getCellObject(j + 1, i + 1).getWall())) {
+                    return true;
+                }
+            }
+            return false;
+    }
+
+    private void removeTwoByTwoWalls(){
+        for (int j = 0; j < NUMBER_OF_ROWS; j++) {
+            for (int i = 0; i < NUMBER_OF_COLUMNS; i++) {
+
+                //if all cells around are inside the maze i.e. without borders
+                if (isCellPositionValid(j,i) &&
+                        isCellPositionValid(j, i+1) &&
+                        isCellPositionValid(j+1, i) &&
+                        isCellPositionValid(j+1, i+1))
+                {
+
+
+                    Cell cell = getCellObject(j,i);
+                    //check if all are walls
+                    if ((cell.getWall() &&
+                            getCellObject(j, i + 1).getWall() &&
+                            getCellObject(j + 1, i).getWall() &&
+                            getCellObject(j + 1, i + 1).getWall()))
+                    {
+                        cell.removeWall();
+                    }
+
+                }
+
+            }
+        }
+
     }
 
 

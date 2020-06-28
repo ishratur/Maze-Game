@@ -102,10 +102,10 @@ public class GameUI {
                 }else if (cell.isCellIsMonster()) {
                     System.out.print(MONSTER);
                 } else if(cell.isCellBlank()){
-                    System.out.print(" ");
+                    System.out.print(EMPTY);
                 }
                 else if (!cell.getWall() && cell.getCellHideStatus()){
-                    System.out.print(" ");
+                    System.out.print(EMPTY);
                 }
                 else {
                     System.out.print(INVISIBLE);
