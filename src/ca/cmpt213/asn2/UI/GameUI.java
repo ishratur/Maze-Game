@@ -80,12 +80,13 @@ public class GameUI {
                     System.out.print(WALL);
                 } else if (cell.isCellIsHero()) {
                     System.out.print(HERO);
-                } else if (cell.isCellIsPower()) {
-                    System.out.print(POWER);
                 } else if (cell.isCellIsMonster()) {
                     System.out.print(MONSTER);
-                } else {
-                    System.out.print(INVISIBLE);
+                }
+                else if (cell.isCellIsPower()) {
+                    System.out.print(POWER);
+                }  else {
+                    System.out.print(EMPTY);
                 }
             }
             System.out.println();
