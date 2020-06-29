@@ -9,6 +9,9 @@ import java.util.Scanner;
  * GameUI class all the UI logic. Only this class interacts with user input and printing to
  * the console. GameLogic class prints all the messages and gets all the
  * user inputs from this class.
+ * Collaborators:
+ * Ishratur Rahman - 301278317
+ * Shawn McGirr - 301358896
  */
 public class GameUI {
     private final int NUMBER_OF_ROWS = 15;

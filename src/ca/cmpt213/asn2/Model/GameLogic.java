@@ -8,6 +8,9 @@ import java.util.*;
 /*
  * GameLogic class has all the logic about the game. This class
  * stores the game state. This is the only class that interacts with the UI class.
+ * Collaborators:
+ * Ishratur Rahman - 301278317
+ * Shawn McGirr - 301358896
  */
 public class GameLogic {
     private final String UP_COMMAND = "W";
