@@ -4,11 +4,12 @@ import ca.cmpt213.asn2.Model.Cell;
 import ca.cmpt213.asn2.Model.Grid;
 
 import java.util.Scanner;
+
 /*
-* GameUI class all the UI logic. Only this class interacts with user input and printing to
-* the console. GameLogic class prints all the messages and gets all the
-* user inputs from this class.
-*/
+ * GameUI class all the UI logic. Only this class interacts with user input and printing to
+ * the console. GameLogic class prints all the messages and gets all the
+ * user inputs from this class.
+ */
 public class GameUI {
     private final int NUMBER_OF_ROWS = 15;
     private final int NUMBER_OF_COLUMNS = 20;
@@ -18,6 +19,7 @@ public class GameUI {
     private final String WALL = "#";
     private final String INVISIBLE = ".";
     private final String EMPTY = " ";
+    private final String LOSE = "X";
 
     public void printHelpMenu() {
         System.out.println("DIRECTIONS");
@@ -49,6 +51,7 @@ public class GameUI {
 
     }
 
+
     public void printInvalidCommand() {
         System.out.println("Invalid move. Please enter just A (left), S (down), D (right), or W (up) or ? (Help)");
     }
@@ -62,7 +65,7 @@ public class GameUI {
     }
 
     public void printHeroKilledMessage() {
-        System.out.println("You have been killed! Better luck next time");
+        System.out.println("I'm sorry, you have been eaten!");
     }
 
     public void printMaze(Grid grid) {
@@ -88,26 +91,29 @@ public class GameUI {
 
     }
 
-    public void printHiddenMaze(Grid grid){
+    public void printHiddenMaze(Grid grid, int winStatus) {
         System.out.println("Maze:");
         for (int j = 0; j < NUMBER_OF_ROWS; j++) {
             for (int i = 0; i < NUMBER_OF_COLUMNS; i++) {
                 Cell cell = grid.getCellObject(j, i);
                 if (cell.getWall() && cell.getCellHideStatus()) {
                     System.out.print(WALL);
-                }else if (cell.isCellIsHero()) {
-                    System.out.print(HERO);
-                }else if (cell.isCellIsPower()) {
-                    System.out.print(POWER);
-                }else if (cell.isCellIsMonster()) {
+                } else if (cell.isCellIsHero()) {
+                    if (winStatus == -1) {
+                        System.out.print(LOSE);
+                    } else {
+                        System.out.print(HERO);
+                    }
+
+                } else if (cell.isCellIsMonster()) {
                     System.out.print(MONSTER);
-                } else if(cell.isCellBlank()){
+                } else if (cell.isCellIsPower()) {
+                    System.out.print(POWER);
+                } else if (cell.isCellBlank()) {
                     System.out.print(EMPTY);
-                }
-                else if (!cell.getWall() && cell.getCellHideStatus()){
+                } else if (!cell.getWall() && cell.getCellHideStatus()) {
                     System.out.print(EMPTY);
-                }
-                else {
+                } else {
                     System.out.print(INVISIBLE);
                 }
             }
@@ -117,8 +123,8 @@ public class GameUI {
 
     }
 
-    public void printGameStatAfterEachMove(int numPowerOfHero, int monsterAlive) {
-        System.out.println("Total number of monsters to be killed: 3" );
+    public void printGameStatAfterEachMove(int numPowerOfHero, int monsterAlive, int monsterToKill) {
+        System.out.println("Total number of monsters to be killed: " + monsterToKill);
         System.out.println("Number of powers currently in possession: " + numPowerOfHero);
         System.out.println("Number of monsters alive:" + monsterAlive);
     }

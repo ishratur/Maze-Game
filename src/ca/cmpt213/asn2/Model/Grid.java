@@ -1,17 +1,16 @@
 package ca.cmpt213.asn2.Model;
 
 
-
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
 import java.util.Stack;
 
 /*
-* Grid class has all the logic to make maze board. This class has all the logic
-* related to the Maze board. All the GameLogic class gets information
-* about the grid from this class.
-*/
+ * Grid class has all the logic to make maze board. This class has all the logic
+ * related to the Maze board. All the GameLogic class gets information
+ * about the grid from this class.
+ */
 public class Grid {
     private ArrayList<Cell> grid;
     private final int NUMBER_OF_ROWS = 15;
@@ -32,9 +31,8 @@ public class Grid {
     }
 
 
-
     private void removeInnerWalls() {
-        int removeWalls = 20;
+        int removeWalls = 30;
         Random rand = new Random();
         int low = 1;
         int maxRow = NUMBER_OF_ROWS - 2;
@@ -42,25 +40,24 @@ public class Grid {
         while (removeWalls > 0) {
             int row = rand.nextInt(maxRow - low) + low;
             int col = rand.nextInt(maxCol - low) + low;
-                Cell cell = getCellObject(row, col);
-                if (cell.getWall()) {
+            Cell cell = getCellObject(row, col);
+            if (cell.getWall()) {
 
-                    if (checkConstrainOpenCells(cell.getRowNumber(), cell.getColumnNumber())){
-
-                        removeWalls--;
-
-                        continue;
-                    }
-                    cell.removeWall();
+                if (checkConstrainOpenCells(cell.getRowNumber(), cell.getColumnNumber())) {
 
                     removeWalls--;
+
+                    continue;
                 }
+                cell.removeWall();
+
+                removeWalls--;
+            }
 
 
         }
 
     }
-
 
 
     private void clearCornerWalls() {
@@ -246,45 +243,42 @@ public class Grid {
     }
 
 
-    private boolean checkConstrainOpenCells(int j , int i){
+    private boolean checkConstrainOpenCells(int j, int i) {
 
-            //if all cells around are inside the maze board i.e. without borders
-            if (isCellPositionValid(j,i) &&
-                    isCellPositionValid(j, i+1) &&
-                    isCellPositionValid(j+1, i) &&
-                    isCellPositionValid(j+1, i+1)) {
+        //if all cells around are inside the maze board i.e. without borders
+        if (isCellPositionValid(j, i) &&
+                isCellPositionValid(j, i + 1) &&
+                isCellPositionValid(j + 1, i) &&
+                isCellPositionValid(j + 1, i + 1)) {
 
 
-                //check if all are open cells
-                if (!(getCellObject(j, i + 1).getWall() ||
-                        getCellObject(j + 1, i).getWall() ||
-                        getCellObject(j + 1, i + 1).getWall()))
-                {
-                    return true;
-                }
+            //check if all are open cells
+            if (!(getCellObject(j, i + 1).getWall() ||
+                    getCellObject(j + 1, i).getWall() ||
+                    getCellObject(j + 1, i + 1).getWall())) {
+                return true;
             }
-            return false;
+        }
+        return false;
     }
 
-    private void removeTwoByTwoWalls(){
+    private void removeTwoByTwoWalls() {
         for (int j = 0; j < NUMBER_OF_ROWS; j++) {
             for (int i = 0; i < NUMBER_OF_COLUMNS; i++) {
 
                 //if all cells around are inside the maze i.e. without borders
-                if (isCellPositionValid(j,i) &&
-                        isCellPositionValid(j, i+1) &&
-                        isCellPositionValid(j+1, i) &&
-                        isCellPositionValid(j+1, i+1))
-                {
+                if (isCellPositionValid(j, i) &&
+                        isCellPositionValid(j, i + 1) &&
+                        isCellPositionValid(j + 1, i) &&
+                        isCellPositionValid(j + 1, i + 1)) {
 
 
-                    Cell cell = getCellObject(j,i);
+                    Cell cell = getCellObject(j, i);
                     //check if all are walls
                     if ((cell.getWall() &&
                             getCellObject(j, i + 1).getWall() &&
                             getCellObject(j + 1, i).getWall() &&
-                            getCellObject(j + 1, i + 1).getWall()))
-                    {
+                            getCellObject(j + 1, i + 1).getWall())) {
                         cell.removeWall();
                     }
 

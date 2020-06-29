@@ -4,10 +4,11 @@ package ca.cmpt213.asn2.Model;
 import ca.cmpt213.asn2.UI.GameUI;
 
 import java.util.*;
+
 /*
-* GameLogic class has all the logic about the game. This class
-* stores the game state. This is the only class that interacts with the UI class.
-*/
+ * GameLogic class has all the logic about the game. This class
+ * stores the game state. This is the only class that interacts with the UI class.
+ */
 public class GameLogic {
     private final String UP_COMMAND = "W";
     private final String DOWN_COMMAND = "S";
@@ -21,6 +22,7 @@ public class GameLogic {
     private final int NUMBER_OF_ROWS = 15;
     private final int NUMBER_OF_COLUMNS = 20;
     private int numberOfMonsters = 3;
+    private int totalMonstersToKill = 3;
 
 
     private ArrayList<Monster> monsters = new ArrayList<>();
@@ -61,42 +63,42 @@ public class GameLogic {
 
     }
 
-    private void cellsAroundHero(){
+    private void cellsAroundHero() {
         int row = hero.getRowNumber();
         int col = hero.getColumnNumber();
         grid.getCellObject(row, col).removeHideCell(true);
 
-        if (grid.isCellPositionValid(row, col - 1)){
+        if (grid.isCellPositionValid(row, col - 1)) {
             grid.getCellObject(row, col - 1).removeHideCell(true);
         }
-        if (grid.isCellPositionValid(row, col + 1)){
+        if (grid.isCellPositionValid(row, col + 1)) {
             grid.getCellObject(row, col + 1).removeHideCell(true);
         }
-        if (grid.isCellPositionValid(row -1 , col)){
-            grid.getCellObject(row -1 , col).removeHideCell(true);
+        if (grid.isCellPositionValid(row - 1, col)) {
+            grid.getCellObject(row - 1, col).removeHideCell(true);
         }
-        if (grid.isCellPositionValid(row + 1, col)){
+        if (grid.isCellPositionValid(row + 1, col)) {
             grid.getCellObject(row + 1, col).removeHideCell(true);
         }
 
         //diagonal
-        if (grid.isCellPositionValid(row + 1, col - 1)){
+        if (grid.isCellPositionValid(row + 1, col - 1)) {
             grid.getCellObject(row + 1, col - 1).removeHideCell(true);
         }
-        if (grid.isCellPositionValid(row + 1, col + 1)){
+        if (grid.isCellPositionValid(row + 1, col + 1)) {
             grid.getCellObject(row + 1, col + 1).removeHideCell(true);
         }
-        if (grid.isCellPositionValid(row - 1, col + 1)){
+        if (grid.isCellPositionValid(row - 1, col + 1)) {
             grid.getCellObject(row - 1, col + 1).removeHideCell(true);
         }
-        if (grid.isCellPositionValid(row - 1, col - 1)){
+        if (grid.isCellPositionValid(row - 1, col - 1)) {
             grid.getCellObject(row - 1, col - 1).removeHideCell(true);
         }
 
 
-
     }
-    private void setCornerVisible(){
+
+    private void setCornerVisible() {
         for (int j = 0; j < NUMBER_OF_ROWS; j++) {
             for (int i = 0; i < NUMBER_OF_COLUMNS; i++) {
                 grid.getCellObject(0, i).removeHideCell(true);
@@ -110,10 +112,11 @@ public class GameLogic {
 
     private void moveHero() {
 
+
         while (true) {
             cellsAroundHero();
             setCornerVisible();
-            gameUI.printHiddenMaze(grid);
+            gameUI.printHiddenMaze(grid, 0);
             gameStatAfterEachMove();
 
             String input = gameUI.getHeroMoveInput();
@@ -122,13 +125,15 @@ public class GameLogic {
                 gameUI.printHelpMenu();
                 continue;
             }
-            if (input.equals(REVEAL_MAZE_COMMAND)){
+            if (input.equals(REVEAL_MAZE_COMMAND)) {
                 gameUI.printMaze(grid);
                 continue;
             }
-//            if (input.equals(CHEAT_COMMAND)){
-//                numberOfMonsters = 1;
-//            }
+            if (input.equals(CHEAT_COMMAND)) {
+                totalMonstersToKill = 1;
+                continue;
+
+            }
 
             if (!isInputValid(input)) {
 
@@ -180,7 +185,13 @@ public class GameLogic {
             Cell newHeroCell = grid.getCellObject(row, col);
             newHeroCell.setCellIsHero(true);
 
-            moveMonsters();
+
+            int status = testPosition(newHeroCell, row, col);
+
+            if (status == -1 || status == 1) {
+                return;
+            }
+
 
             if (newHeroCell.isCellIsPower()) {
                 hero.incrementPower();
@@ -190,37 +201,11 @@ public class GameLogic {
                     spawnPower();
                 }
             }
+            moveMonsters();
+            newHeroCell = grid.getCellObject(row, col);
+            status = testPosition(newHeroCell, row, col);
 
-            while (newHeroCell.isCellIsMonster()) {
-                if (hero.getPower() <= 0) {
-                    gameUI.printHeroKilledMessage();
-                    return;
-                }
-                hero.decrementPower();
-                
-                for (int i = 0; i < numberOfMonsters; i++) {
-                    if (monsters.get(i).isAlive() && monsters.get(i).getRowNumber() == row && monsters.get(i).getColumnNumber() == col) {
-                        monsters.get(i).killMonster();
-                        numberOfMonsters -= 1;
-                        //remove the monster from monsters list
-//                        monsters.remove(i);
-                        newHeroCell.decrementMonster();
-                        break;
-                    }
-                }
-
-            }
-
-            boolean won = true;
-            for (int i = 0; i < 3; i++) {
-                if (monsters.get(i).isAlive()) {
-                    won = false;
-                    break;
-                }
-
-            }
-            if (won) {
-                gameUI.printWinMessage();
+            if (status == -1 || status == 1) {
                 return;
             }
 
@@ -229,10 +214,57 @@ public class GameLogic {
 
     }
 
+    private int testPosition(Cell newHeroCell, int row, int col) {
+        while (newHeroCell.isCellIsMonster()) {
+            if (hero.getPower() <= 0) {
+                gameUI.printHeroKilledMessage();
+                gameUI.printHiddenMaze(grid, -1);
+                return -1;
+            }
+
+            hero.decrementPower();
+
+            for (int i = 0; i < 3; i++) {
+                if (monsters.get(i).isAlive() && monsters.get(i).getRowNumber() == row && monsters.get(i).getColumnNumber() == col) {
+
+                    monsters.get(i).killMonster();
+                    numberOfMonsters -= 1;
+                    newHeroCell.decrementMonster();
+                    break;
+                }
+            }
+
+        }
+
+        boolean won = true;
+        boolean wonCheat = false;
+        for (int i = 0; i < 3; i++) {
+            if (monsters.get(i).isAlive()) {
+                won = false;
+
+            } else {
+                wonCheat = true;
+            }
+        }
+
+        if (wonCheat && totalMonstersToKill == 1) {
+            gameUI.printWinMessage();
+            return 1;
+        }
+        if (won) {
+            gameUI.printWinMessage();
+            return 1;
+        }
+        return 0;
+
+    }
+
+
     private boolean isInputValid(String userInput) {
         return (userInput.equals(UP_COMMAND) || userInput.equals(DOWN_COMMAND) ||
                 userInput.equals(RIGHT_COMMAND) || userInput.equals(LEFT_COMMAND) ||
-                userInput.equals(HELP_COMMAND) || userInput.equals(REVEAL_MAZE_COMMAND));
+                userInput.equals(HELP_COMMAND) || userInput.equals(REVEAL_MAZE_COMMAND)) ||
+                userInput.equals(CHEAT_COMMAND);
 
 
     }
@@ -248,7 +280,7 @@ public class GameLogic {
     }
 
     private void moveMonsters() {
-        for (int i = 0; i < numberOfMonsters; i++) {
+        for (int i = 0; i < 3; i++) {
             moveMonster(i);
         }
     }
@@ -270,23 +302,20 @@ public class GameLogic {
                 }
                 monsters.get(i).goUp();
                 break;
-            }
-            else if (input.equals(DOWN_COMMAND)) {
+            } else if (input.equals(DOWN_COMMAND)) {
                 if (!isMoveValid(row + 1, col)) {
                     continue;
                 }
                 monsters.get(i).goDown();
                 break;
-            }
-            else if (input.equals(RIGHT_COMMAND)) {
+            } else if (input.equals(RIGHT_COMMAND)) {
                 if (!isMoveValid(row, col + 1)) {
 
                     continue;
                 }
                 monsters.get(i).goRight();
                 break;
-            }
-            else if (input.equals(LEFT_COMMAND)) {
+            } else if (input.equals(LEFT_COMMAND)) {
                 if (!isMoveValid(row, col - 1)) {
 
                     continue;
@@ -306,7 +335,7 @@ public class GameLogic {
 
     private void gameStatAfterEachMove() {
 
-        gameUI.printGameStatAfterEachMove(hero.getPower(), numberOfMonsters);
+        gameUI.printGameStatAfterEachMove(hero.getPower(), numberOfMonsters, totalMonstersToKill);
 
 
     }
