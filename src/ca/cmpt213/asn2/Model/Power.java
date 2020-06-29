@@ -3,6 +3,9 @@ package ca.cmpt213.asn2.Model;
 /*
  * Power class has all the data related to Power. This class
  * is used to find all the power related data.
+ * Collaborators:
+ * Ishratur Rahman - 301278317
+ * Shawn McGirr - 301358896
  */
 public class Power {
     private int rowNumber;

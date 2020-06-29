@@ -10,6 +10,9 @@ import java.util.Stack;
  * Grid class has all the logic to make maze board. This class has all the logic
  * related to the Maze board. All the GameLogic class gets information
  * about the grid from this class.
+ * Collaborators:
+ * Ishratur Rahman - 301278317
+ * Shawn McGirr - 301358896
  */
 public class Grid {
     private ArrayList<Cell> grid;

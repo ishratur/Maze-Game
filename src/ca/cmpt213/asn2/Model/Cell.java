@@ -5,6 +5,9 @@ package ca.cmpt213.asn2.Model;
 * Cell class has all the data related to each cell in the Maze board.
 * Data is encapsulated according to the requirements of other classes using
 * this class.
+* Collaborators:
+* Ishratur Rahman - 301278317
+* Shawn McGirr - 301358896
 */
 public class Cell {
     private int rowNumber;
